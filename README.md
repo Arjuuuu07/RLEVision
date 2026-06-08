@@ -199,6 +199,8 @@ All models receive identical 15,408-dim RLE vectors.
 | Main branch only | 0.881 | parallel adds +0.012 |
 
 ---
+note-A custom CNN was included as a pixel-based baseline to evaluate how a model trained directly on ultrasound image pixels performs. A pretrained ResNet-18 was also evaluated to represent a stronger, modern deep learning approach that benefits from large-scale ImageNet pretraining. These baselines provide reference points for comparing the proposed RLE-based structural representation against both a basic pixel-learning model and a high-performance pretrained architecture.
+
 
 ## Honest limitations
 
@@ -257,14 +259,15 @@ RLE on rows → (172 × 36) = 6,192 values
 RLE on cols → (256 × 36) = 9,216 values
 Each run: [normalized_start, normalized_length]
         ↓
-Flat vector: 15,408 float32 features
+Flat vector: 15,408 float32 features                   
         ↓
 RLEClassifier
-  ├── Main branch: Conv1d + residual + SE attention
+  ├── Main branch: Conv1d + residual + SE attention    
   ├── Parallel branch: kernels (5, 11, 13, 17)
   │   captures patterns at multiple spatial scales
   └── Fused 512-dim → FC → cancer / normal
 ```
+why binarisation?-Breast ultrasound lesions frequently appear as darker regions relative to surrounding tissue. Binarization was used to emphasize structural patterns and region distribution, enabling the RLE representation to focus on shape, boundaries, spatial arrangement, and run-length structure rather than raw intensity values.
 
 ---
 
